@@ -11,7 +11,7 @@ echo Restarting Explorer process...
 
 taskkill /f /im explorer.exe
 
-timeout /t 4  >nul 2>nul
+timeout /t 2  >nul 2>nul
 
 start  /b "" "%windir%\explorer.exe"
 
