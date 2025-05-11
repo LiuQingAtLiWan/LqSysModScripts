@@ -13,6 +13,6 @@ taskkill /f /im explorer.exe
 
 timeout /t 4  >nul 2>nul
 
-start explorer.exe
+start  /b "" "%windir%\explorer.exe"
 
 echo Explorer restarted successfully.
