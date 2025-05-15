@@ -14,36 +14,5 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-REM check if the script is running with admin privileges
-net session >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo Restarting the script with admin privileges...
-    PowerShell Start-Process -FilePath "%0" -Verb RunAs
-    exit /b
-)
-
-REM change the registry value
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    $path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3'; ^
-    if (Test-Path $path) { ^
-        $s = Get-ItemProperty -Path $path -Name 'Settings'; ^
-        $v = $s.Settings[8]; ^
-        if ($v -eq 3) { ^
-            Write-Host 'Switching to always show'; ^
-            $s.Settings[8] = 2;  ^
-        } else  { ^
-            if($v -eq 2){ ^
-                Write-Host 'Switching to auto-hide'; ^
-                $s.Settings[8] = 3; ^
-            } ^
-            else{ ^
-                echo unexpected value; ^
-            } ;^
-        }; ^
-        Set-ItemProperty -Path $path -Name 'Settings' -Value $s.Settings; ^
-    }
-
-REM restart explorer to apply the changes
-set "SCRIPT_DIR=%~dp0"
-call "%SCRIPT_DIR%restart_explorer.bat"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0toggle_taskbar_auto_hide.ps1"
 
